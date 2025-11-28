@@ -3,25 +3,30 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
 
-// Initialize App
+// Import Routes
+const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes'); // The file causing your error
+const cartRoutes = require('./routes/cartRoutes');       // The new cart system
+
 const app = express();
 
 // 1. Connect to Database
 connectDB();
 
-// 2. Middleware (UPDATED: Allow Everyone)
+// 2. Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: true, // <--- This allows ANY URL (localhost, 127.0.0.1, etc.)
+    origin: true, // Allow all origins for development
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));
 
-// 3. Routes
+// 3. Register Routes
 app.use('/auth', authRoutes);
+app.use('/products', productRoutes);
+app.use('/cart', cartRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: '🚀 EliteHub Backend is Running!' });

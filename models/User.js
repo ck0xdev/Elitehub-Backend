@@ -2,14 +2,13 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: false }, // Optional for now
+  name: { type: String, required: false }, 
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: 'user' }, // 'user' or 'admin'
+  role: { type: String, default: 'user' }, 
   addresses: { type: [mongoose.Schema.Types.Mixed], default: [] },
 }, { timestamps: true });
 
-// Virtual 'id' field to make Frontend life easier
 const virtual = userSchema.virtual('id');
 virtual.get(function () {
   return this._id;
@@ -21,15 +20,14 @@ userSchema.set('toJSON', {
   transform: function (doc, ret) { delete ret._id; delete ret.password; }
 });
 
-// Password Hash Middleware (Automatic Security)
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+// FIXED: Removed 'next' parameter. Mongoose waits for the Promise automatically.
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+  
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
-// Helper to check password
 userSchema.methods.checkPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
