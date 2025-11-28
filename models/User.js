@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: 'user' },
+  // Feature: Save multiple addresses
   addresses: { type: [mongoose.Schema.Types.Mixed], default: [] }, 
-  // NEW: Store Product IDs for Wishlist
+  // Feature: Wishlist (References Product IDs)
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
 }, { timestamps: true });
 

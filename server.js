@@ -4,23 +4,23 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
-// Import Routes
+// Import All Routes
 const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes'); // The file causing your error
-const cartRoutes = require('./routes/cartRoutes'); 
-const orderRoutes = require('./routes/orderRoutes');  
-const userRoutes = require('./routes/userRoutes');  
+const productRoutes = require('./routes/productRoutes'); // Ensure this file exists
+const cartRoutes = require('./routes/cartRoutes');       // Ensure this file exists
+const orderRoutes = require('./routes/orderRoutes');     // Ensure this file exists
+const userRoutes = require('./routes/userRoutes');       // We will create this next
 
 const app = express();
 
-// 1. Connect to Database
+// 1. Connect Database
 connectDB();
 
 // 2. Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: true, // Allow all origins for development
+    origin: true, // Allows localhost and 127.0.0.1
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));
@@ -30,13 +30,12 @@ app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', orderRoutes);
-app.use('/users', userRoutes);
+app.use('/users', userRoutes); // New User Profile Route
 
 app.get('/', (req, res) => {
-    res.json({ message: '🚀 EliteHub Backend is Running!' });
+    res.json({ message: '🚀 EliteHub Backend is Running Full Power!' });
 });
 
-// 4. Start Server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

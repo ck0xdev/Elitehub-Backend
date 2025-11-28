@@ -3,8 +3,7 @@ const User = require('../models/User');
 exports.fetchUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    // Populate wishlist with actual product details
-    const user = await User.findById(id).populate('wishlist');
+    const user = await User.findById(id).populate('wishlist'); // Send full product details for wishlist
     res.status(200).json({
         id: user.id,
         email: user.email,
