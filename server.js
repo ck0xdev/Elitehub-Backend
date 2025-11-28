@@ -7,7 +7,9 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes'); // The file causing your error
-const cartRoutes = require('./routes/cartRoutes');       // The new cart system
+const cartRoutes = require('./routes/cartRoutes'); 
+const orderRoutes = require('./routes/orderRoutes');  
+const userRoutes = require('./routes/userRoutes');  
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(cors({
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
+app.use('/orders', orderRoutes);
+app.use('/users', userRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: '🚀 EliteHub Backend is Running!' });
